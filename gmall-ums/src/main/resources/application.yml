@@ -22,10 +22,10 @@ spring:
     username: root
     driver-class-name: com.mysql.jdbc.Driver
     password: root
-    url: jdbc:mysql://192.168.1.0:3306/guli_ums
+    url: jdbc:mysql://192.168.1.110:3306/guli_ums
   redis:
     port: 6379
-    host: 192.168.1.0
+    host: 192.168.1.110
 feign:  #开启feign对sentinel的支持
   sentinel:
     enabled: true

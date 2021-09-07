@@ -1,0 +1,16 @@
+package com.atguigu.gmall.pms.vo;
+
+import com.atguigu.gmall.pms.entity.AttrEntity;
+import com.atguigu.gmall.pms.entity.AttrGroupEntity;
+import lombok.Data;
+
+import java.util.List;
+
+/**
+ * @author zstars
+ * @create 2021-09-03 17:31
+ */
+@Data
+public class GroupVo extends AttrGroupEntity {
+    private List<AttrEntity> attrEntities;
+}

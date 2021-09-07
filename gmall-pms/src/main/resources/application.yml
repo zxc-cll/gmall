@@ -5,13 +5,13 @@ spring:
   cloud:
     nacos:
       discovery:  #这里写注册中心地址
-        server-addr: 127.0.0.1:8848
+        server-addr: localhost:8848
     sentinel:
       transport:
         port: 8719
-        dashboard: 127.0.0.1:8080
+        dashboard: localhost:8080
   zipkin:
-    base-url: http://127.0.0.1:9411
+    base-url: http://localhost:9411
     sender:   #需要吧链路追踪的信息传给zipkin的这个服务
       type: web   #发送的方式
     discovery-client-enabled: false    # 此服务和zipkin的交互产生的请求，是否把链路追踪自己的请求发送过去
@@ -22,10 +22,10 @@ spring:
     username: root
     driver-class-name: com.mysql.jdbc.Driver
     password: root
-    url: jdbc:mysql://192.168.1.0:3306/guli_pms
+    url: jdbc:mysql://192.168.1.110:3306/guli_pms
   redis:
     port: 6379
-    host: 192.168.1.0
+    host: 192.168.1.110
 feign:  #开启feign对sentinel的支持
   sentinel:
     enabled: true
@@ -33,5 +33,8 @@ mybatis-plus:
   mapper-locations: classpath:mapper/pms/**/*.xml
   type-aliases-package: com.atguigu.gmall.pms.entity
   global-config:
-    db-config:
-      id-type: auto #面试的时候要说使用分库分表mycat里面讲了 id 的全局策略，默认分布式id，真实开发环境使用分布式id因为要分库分表，现在单服务器，不需要分库分表现在使用数据库自增
+    db-config:  #面试的时候要说使用分库分表mycat里面讲了 id 的全局策略，默认分布式id，真实开发环境使用分布式id因为要分库分表，现在单服务器，不需要分库分表现在使用数据库自增
+      id-type: auto
+logging:
+  level:
+    com.atguigu.gmall.pms: debug
