@@ -1,22 +1,19 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import com.atguigu.gmall.common.bean.PageParamVo;
+import com.atguigu.gmall.common.bean.PageResultVo;
+import com.atguigu.gmall.pms.entity.SpuEntity;
+import com.atguigu.gmall.pms.mapper.SpuMapper;
 import com.atguigu.gmall.pms.service.*;
 import com.atguigu.gmall.pms.vo.SpuVo;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.Map;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.atguigu.gmall.common.bean.PageResultVo;
-import com.atguigu.gmall.common.bean.PageParamVo;
-
-import com.atguigu.gmall.pms.mapper.SpuMapper;
-import com.atguigu.gmall.pms.entity.SpuEntity;
-import org.springframework.transaction.annotation.Transactional;
+import io.seata.spring.annotation.GlobalTransactional;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 @Service("spuService")
@@ -34,7 +31,8 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     SkuImagesService skuImagesService;
     @Autowired
     SkuAttrValueService skuAttrValueService;
-
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
@@ -71,7 +69,8 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         return new PageResultVo(page);
     }
 
-    @Transactional(rollbackFor = Exception.class,timeout = 3)
+    //@Transactional(rollbackFor = Exception.class,timeout = 3)
+    @GlobalTransactional
     @Override
     public void bigSave(SpuVo spu) {
         // 1.先保存spu相关信息
@@ -80,7 +79,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         Long spuId = spu.getId();
         // 1.2. 保存pms_spu_desc 不会回滚 --> spu 19 --> spuDesc 20(如果依然是19，说明回滚了)
         this.spuDescService.saveSpuDesc(spu,spuId);
-        int i =1/0;
+//        int i =1/0;
 
         // 1.3. 保存基本属性值 pms_spu_attr_value
         this.spuAttrValueService.saveSpuAttrValue(spu,spuId);
@@ -91,6 +90,9 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         // 2.3. 保存销售属性pms_sku_attr_value
 
         // 3.保存营销信息（skuId）
+ //       int i =1/0;
+
+        this.rabbitTemplate.convertAndSend("PMS_SPU_EXCHANGE","item.insert",spuId);
 
 
     }

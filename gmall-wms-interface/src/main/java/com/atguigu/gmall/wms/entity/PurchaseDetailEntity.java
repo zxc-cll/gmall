@@ -3,42 +3,51 @@ package com.atguigu.gmall.wms.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.math.BigDecimal;
 import java.io.Serializable;
-import java.util.Date;
+
 import lombok.Data;
 
 /**
- * 库存工作单
+ * 
  * 
  * @author zxc
  * @email zxc_cll@163.com
  * @date 2021-08-28 19:39:23
  */
 @Data
-@TableName("wms_ware_order_bill_detail")
-public class WareOrderBillDetailEntity implements Serializable {
+@TableName("wms_purchase_detail")
+public class PurchaseDetailEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * id
+	 * 
 	 */
 	@TableId
 	private Long id;
 	/**
-	 * sku_id
+	 * 采购单id
+	 */
+	private Long purchaseId;
+	/**
+	 * 采购商品id
 	 */
 	private Long skuId;
 	/**
-	 * sku_name
-	 */
-	private String skuName;
-	/**
-	 * 购买个数
+	 * 采购数量
 	 */
 	private Integer skuNum;
 	/**
-	 * 工作单id
+	 * 采购金额
 	 */
-	private Long taskId;
+	private BigDecimal skuPrice;
+	/**
+	 * 仓库id
+	 */
+	private Long wareId;
+	/**
+	 * 状态[0新建，1已分配，2正在采购，3已完成，4采购失败]
+	 */
+	private Integer status;
 
 }

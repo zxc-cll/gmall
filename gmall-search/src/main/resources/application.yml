@@ -1,0 +1,44 @@
+
+server:
+  port: 18086
+spring:
+  cloud:
+    nacos:
+      discovery:  #这里写注册中心地址
+        server-addr: localhost:8848
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:8080
+  zipkin:
+    base-url: http://localhost:9411
+    sender:   #需要吧链路追踪的信息传给zipkin的这个服务
+      type: web   #发送的方式
+    discovery-client-enabled: false    # 此服务和zipkin的交互产生的请求，是否把链路追踪自己的请求发送过去
+  sleuth:   #链路追踪使用上面的zipkin实现
+    sampler:
+      probability:  #采集率开发学习环境请求没那么大使用1代表全部100%追踪采集率，生产环境一般使用默认采集率10
+  elasticsearch:
+    rest:
+      uris: http://192.168.1.110:9200
+  jackson:
+    default-property-inclusion: non_null
+  thymeleaf:
+    cache: false
+  rabbitmq:
+    host: 192.168.1.110
+    virtual-host: /zxc
+    username: zxc
+    password: zxc
+    listener:
+      type: simple
+      simple:
+        concurrency: 4
+        prefetch: 1
+        acknowledge-mode: manual
+feign:  #开启feign对sentinel的支持
+  sentinel:
+    enabled: true
+logging:
+  level:
+    com.atguigu.gmall.search: debug

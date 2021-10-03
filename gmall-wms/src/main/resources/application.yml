@@ -31,7 +31,7 @@ feign:  #开启feign对sentinel的支持
     enabled: true
 mybatis-plus:
   mapper-locations: classpath:mapper/wms/**/*.xml
-  type-aliases-package: com.atguigu.gmall.wms.entity
+  type-aliases-package: com.atguigu.gmall.wms.api.entity
   global-config:
     db-config: #面试的时候要说使用分库分表mycat里面讲了 id 的全局策略，默认分布式id，真实开发环境使用分布式id因为要分库分表，现在单服务器，不需要分库分表现在使用数据库自增
       id-type: auto
